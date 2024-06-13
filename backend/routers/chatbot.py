@@ -8,8 +8,13 @@ import os
 router = APIRouter()
 
 @router.post("/query", tags=["query"])
-async def query_create(query: Query):
+async def query_create(qry: Query):
     db.query.create(Query)
+    generate_embeddings(qry.query)
+
+@router.get("/response/{query_id}")
+async def query_response_get(query_id):
+    db.query.response_get(query_id)
 
 
 
@@ -21,6 +26,6 @@ def generate_embeddings(text):
     This will be used to vectorize data and user input for interactions with Azure OpenAI.
     '''
     response = openai_client.embeddings.create(input=text, model="text-embedding-ada-002")
-    embeddings =response.model_dump()
+    embeddings = response.model_dump()
     time.sleep(0.5) 
     return embeddings['data'][0]['embedding']

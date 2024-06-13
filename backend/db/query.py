@@ -14,3 +14,7 @@ db = mongo_client['chatbot']
 
 def create(query: Query):
     db['queries'].insert_one(query) 
+
+
+def response_get(qryID: int):
+    db['queries'].find_one()
