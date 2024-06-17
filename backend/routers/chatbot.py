@@ -5,18 +5,16 @@ from openai import AzureOpenAI
 import time
 import os
 
-router = APIRouter()
+app = APIRouter()
 
-@router.post("/query", tags=["query"])
+@app.post("/query", tags=["query"])
 async def query_create(qry: Query):
     db.query.create(Query)
     generate_embeddings(qry.query)
 
-@router.get("/response/{query_id}")
+@app.get("/response/{query_id}")
 async def query_response_get(query_id):
     db.query.response_get(query_id)
-
-
 
 openai_client = AzureOpenAI(api_key=os.getenv("AZURE_OPENAI_KEY"), azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"), api_version="2024-02-01",)
 
