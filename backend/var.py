@@ -1,5 +1,7 @@
+from dotenv import load_dotenv
 import os
 
+load_dotenv()
 COSMOS_MONGO_USER = os.getenv("COSMOS_MONGO_USER")
 COSMOS_MONGO_PWD = os.getenv("COSMOS_MONGO_PWD")
 COSMOS_MONGO_SERVER = os.getenv("COSMOS_MONGO_SERVER")

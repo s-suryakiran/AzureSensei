@@ -1,27 +1,23 @@
-from models.chatbot import Query
-import db.query
+# from models.chatbot import Query
+import db
 import time
 
 
 from openai import AzureOpenAI
-import config.var as vars
+import var
+# from .config import var as vars
 
 
-def query_create(qry: Query):
-    db.query.create(Query)
-    generate_embeddings(qry.query)
+# def query_create(qry: Query):
+#     db.query.create(Query)
+#     generate_embeddings(qry.query)
 
 
-def query_response_get(query_id):
-    db.query.response_get(query_id)
+# def query_response_get(query_id):
+#     db.query.response_get(query_id)
 
-
-AOAI_client = AzureOpenAI(
-    api_key=vars.AZURE_OPENAI_KEY,
-    azure_endpoint=vars.AZURE_OPENAI_ENDPOINT,
-    api_version=vars.AZURE_OPENAI_VERSION,
-)
-collection = db.query.get_azure_collection()
+AOAI_client = AzureOpenAI(api_key=var.AZURE_OPENAI_KEY,azure_endpoint=var.AZURE_OPENAI_ENDPOINT,api_version=var.AZURE_OPENAI_VERSION)
+collection = db.get_azure_collection()
 
 
 def generate_embeddings(text):
@@ -40,22 +36,15 @@ def vector_search(query, num_results=5):
     embeddings_list = []
     pipeline = [
         {
-            "$search": {
+            '$search': {
                 "cosmosSearch": {
                     "vector": query_embedding,
                     "path": "c_vector",
-                    "k": num_results,  # , #, "efsearch": 40 # optional for HNSW only
-                    # "filter": {"title": {"$ne": "Azure Cosmos DB"}}
+                    "k": num_results#, #, "efsearch": 40 # optional for HNSW only 
+                    #"filter": {"title": {"$ne": "Azure Cosmos DB"}}
                 },
-                "returnStoredSource": True,
-            }
-        },
-        {
-            "$project": {
-                "similarityScore": {"$meta": "searchScore"},
-                "document": "$$ROOT",
-            }
-        },
+                "returnStoredSource": True }},
+        {'$project': { 'similarityScore': { '$meta': 'searchScore' }, 'document' : '$$ROOT' } }
     ]
     results = collection.aggregate(pipeline)
     return results
