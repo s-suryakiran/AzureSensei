@@ -1,13 +1,8 @@
 import streamlit as st
-import requests
+import chatbot
 import models.chatbot
 
 st.title("Welcome To Azure Sensei")
-
-def new_query_client(qry: models.chatbot.Query):
-    url = 'https://localhost:8000/query'
-    x = requests.post(url, json = qry)
-    print(x.text)
 
 # Initialize chat history
 if "messages" not in st.session_state:
@@ -26,5 +21,5 @@ if prompt := st.chat_input("Ask your question"):
 
     with st.chat_message("assistant"):
         for m in st.session_state.messages:
-            new_query_client(qry=models.chatbot.Query(role=m["role"], query=m["content"]))
+            chatbot.query_create(qry=models.chatbot.Query(role=m["role"], query=m["content"]))
 

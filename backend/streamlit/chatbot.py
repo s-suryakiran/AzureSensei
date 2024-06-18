@@ -1,19 +1,14 @@
-from fastapi import APIRouter
 from models.chatbot import Query
 import db.query
 from openai import AzureOpenAI
 import time
 import os
 
-app = APIRouter()
-
-@app.post("/query", tags=["query"])
-async def query_create(qry: Query):
+def query_create(qry: Query):
     db.query.create(Query)
     generate_embeddings(qry.query)
 
-@app.get("/response/{query_id}")
-async def query_response_get(query_id):
+def query_response_get(query_id):
     db.query.response_get(query_id)
 
 openai_client = AzureOpenAI(api_key=os.getenv("AZURE_OPENAI_KEY"), azure_endpoint=os.getenv("AZURE_OPENAI_ENDPOINT"), api_version="2024-02-01",)
