@@ -21,5 +21,6 @@ if prompt := st.chat_input("Ask your question"):
 
     with st.chat_message("assistant"):
         for m in st.session_state.messages:
-            chatbot.query_create(qry=models.chatbot.Query(role=m["role"], query=m["content"]))
-
+            chatbot.query_create(
+                qry=models.chatbot.Query(role=m["role"], query=m["content"])
+            )
