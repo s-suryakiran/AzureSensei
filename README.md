@@ -1,5 +1,8 @@
 # AzureSensei
 
+To access the app visit :  https://azuresensei.streamlit.app/
+
+
 To run the app, follow these steps:
 
 1. Navigate to the `backend` folder:
